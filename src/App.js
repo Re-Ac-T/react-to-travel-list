@@ -1,14 +1,9 @@
-import React, {useState} from "react";
-import ReactTooltip from "react-tooltip";
-import MapChart from "./pages/MapChart";
+import React from "react";
+import MainPage from "./pages/MainPage";
 
 const App = () => {
-  const [content, setContent] = useState("");
   return (
-    <>
-      <MapChart setTooltipContent={setContent} />
-      <ReactTooltip>{content}</ReactTooltip>
-    </>
+    <MainPage />
   );
 }
 

@@ -29,6 +29,10 @@ const rounded = num => {
 
 const MapChart = ({ setTooltipContent }) => {
   const [selectedKey, setSelectedKey] = useState([]);
+
+  const makerOnClick = (name)=>{
+    console.log(name)
+  }
   return (
     <>
       <h1>To-Travel List</h1>
@@ -80,7 +84,7 @@ const MapChart = ({ setTooltipContent }) => {
               }}
               style={{
                 default: {
-                  fill: "#222",
+                  fill: "#818285",
                   outline: "none"
                 },
                 hover: {
@@ -97,7 +101,7 @@ const MapChart = ({ setTooltipContent }) => {
           }
         </Geographies>          
         {markers.map(({ name, coordinates, markerOffset }) => (
-        <Marker key={name} coordinates={coordinates}>
+        <Marker key={name} coordinates={coordinates} onClick={()=>{makerOnClick(name)}}>
           <g
             fill="none"
             stroke="#FF5533"
