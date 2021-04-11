@@ -7,11 +7,11 @@ import {
 } from "react-simple-maps";
 
 const markers = [
-    { markerOffset: -30, name: "Asia", coordinates: [140, 20] },
-    { markerOffset: -30, name: "North America", coordinates: [-140, 5] },
-    { markerOffset: -30, name: "South America", coordinates: [-120, -30] },
-    { markerOffset: -30, name: "Africa", coordinates: [0, -15] },
-    { markerOffset: -30, name: "Europe", coordinates: [15, 70] },
+    { markerOffset: -30, code:'as', name: "Asia", coordinates: [140, 20] },
+    { markerOffset: -30, code:'na', name: "North America", coordinates: [-140, 5] },
+    { markerOffset: -30, code:'sa', name: "South America", coordinates: [-120, -30] },
+    { markerOffset: -30, code:'af', name: "Africa", coordinates: [0, -15] },
+    { markerOffset: -30, code:'eu', name: "Europe", coordinates: [15, 70] },
   ];
 
 const geoUrl =
@@ -27,7 +27,7 @@ const rounded = num => {
   }
 };
 
-const MapChart = ({ setTooltipContent }) => {
+const MapChart = ({ setTooltipContent, setplanListPage }) => {
   const [selectedKey, setSelectedKey] = useState([]);
   const [selectedCountries, setSelectedCountries] = useState({
     'Asia' : [
@@ -47,8 +47,13 @@ const MapChart = ({ setTooltipContent }) => {
     ]
   });
   
-  const makerOnClick = (name)=>{
+  const makerOnClick = (code, name)=>{
     console.log(name)
+    setplanListPage({
+        state: true, 
+        locationCode: code, 
+        locationName: name
+    });
   }
 
                   console.log(selectedCountries);
@@ -128,8 +133,8 @@ const MapChart = ({ setTooltipContent }) => {
             )
           }
         </Geographies>          
-        {markers.map(({ name, coordinates, markerOffset }) => (
-          <Marker key={name} coordinates={coordinates} onClick={()=>{makerOnClick(name)}}>
+        {markers.map(({ name, code, coordinates, markerOffset }) => (
+          <Marker key={name} coordinates={coordinates} onClick={()=>{makerOnClick(code, name)}}>
             <g
               fill="none"
               stroke="#FF5533"
