@@ -1,10 +1,46 @@
 import React from 'react';
+import styled from 'styled-components';
+import PlanBlock from '../components/PlanBlock';
 
-const PlanListPage = ()=>{
+import { HiOutlineLocationMarker } from "react-icons/hi";
+import { useSelector } from 'react-redux';
+
+const PlanListBlock = styled.section`
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+
+    .locationIcon{
+        color: #F53;
+        font-size: 18px;
+    }
+`;
+
+const PlanListPage = ({ locationCode, locationName, setplanListPage })=>{
+
+    const plans = useSelector((state)=>state.planData);
+
+    const onClickExit = ()=>{
+        setplanListPage({
+            state: false, 
+            locationCode: '', 
+            locationName: ''
+        });
+    }
 
     return(
-        <>
-        </>
+        <PlanListBlock>
+            <div onClick={onClickExit}>
+                <HiOutlineLocationMarker className="locationIcon"/> 
+                {locationName}
+            </div>
+            {plans.map((plan, idx)=>
+                plan.code === locationCode && <PlanBlock data={plan} key={idx}/>
+            )}
+        </PlanListBlock>
     );
 }
 

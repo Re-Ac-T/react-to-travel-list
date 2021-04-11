@@ -7,11 +7,11 @@ import {
 } from "react-simple-maps";
 
 const markers = [
-    { markerOffset: -30, name: "Asia", coordinates: [140, 20] },
-    { markerOffset: -30, name: "North America", coordinates: [-140, 5] },
-    { markerOffset: -30, name: "South America", coordinates: [-120, -30] },
-    { markerOffset: -30, name: "Africa", coordinates: [0, -15] },
-    { markerOffset: -30, name: "Europe", coordinates: [15, 70] },
+    { markerOffset: -30, code:'as', name: "Asia", coordinates: [140, 20] },
+    { markerOffset: -30, code:'na', name: "North America", coordinates: [-140, 5] },
+    { markerOffset: -30, code:'sa', name: "South America", coordinates: [-120, -30] },
+    { markerOffset: -30, code:'af', name: "Africa", coordinates: [0, -15] },
+    { markerOffset: -30, code:'eu', name: "Europe", coordinates: [15, 70] },
   ];
 
 const geoUrl =
@@ -27,15 +27,20 @@ const rounded = num => {
   }
 };
 
-const MapChart = ({ setTooltipContent }) => {
+const MapChart = ({ setTooltipContent, setplanListPage }) => {
+
   const [selectedKey, setSelectedKey] = useState([]);
 
-  const makerOnClick = (name)=>{
-    console.log(name)
+  const makerOnClick = (code, name)=>{
+    setplanListPage({
+      state: true, 
+      locationCode: code, 
+      locationName: name}
+    );
   }
+  
   return (
     <>
-      <h1>To-Travel List</h1>
       <ComposableMap data-tip="" projectionConfig={{ scale: 150 }}>
         <Geographies geography={geoUrl}>
           {({ geographies }) => 
@@ -80,7 +85,7 @@ const MapChart = ({ setTooltipContent }) => {
               }}
               onClick={(e) => {
                 setSelectedKey(selectedKey.concat(`${geo.rsmKey}`));     // 선택된 Geography 컴포넌트의 키값을 selectedKey 배열에 추가
-                console.log(geographies);
+                console.log(geo.properties.ISO_A2);
               }}
               style={{
                 default: {
@@ -100,8 +105,8 @@ const MapChart = ({ setTooltipContent }) => {
             )
           }
         </Geographies>          
-        {markers.map(({ name, coordinates, markerOffset }) => (
-        <Marker key={name} coordinates={coordinates} onClick={()=>{makerOnClick(name)}}>
+        {markers.map(({ name, code, coordinates, markerOffset }) => (
+        <Marker key={name} coordinates={coordinates} onClick={()=>makerOnClick(code, name)}>
           <g
             fill="none"
             stroke="#FF5533"
