@@ -50,6 +50,9 @@ const MapChart = ({ setTooltipContent }) => {
   const makerOnClick = (name)=>{
     console.log(name)
   }
+
+                  console.log(selectedCountries);
+
   return (
     <>
       <h1>To-Travel List</h1>
@@ -106,7 +109,6 @@ const MapChart = ({ setTooltipContent }) => {
                   ...selectedCountries,
                   [geographies[CountryNum].properties.CONTINENT] : CountryList
                 });
-                console.log(selectedCountries);
               }}
               style={{
                 default: {
