@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import PlanBlock from '../components/PlanBlock';
 
+import { ImCancelCircle } from "react-icons/im";
+import { HiOutlinePlusCircle } from "react-icons/hi";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useSelector } from 'react-redux';
 
@@ -33,9 +35,11 @@ const PlanListPage = ({ locationCode, locationName, setplanListPage })=>{
 
     return(
         <PlanListBlock>
-            <div onClick={onClickExit}>
+            <div>
                 <HiOutlineLocationMarker className="locationIcon"/> 
                 {locationName}
+                <HiOutlinePlusCircle />
+                <ImCancelCircle onClick={onClickExit}/>
             </div>
             {plans.map((plan, idx)=>
                 plan.code === locationCode && <PlanBlock data={plan} key={idx}/>
