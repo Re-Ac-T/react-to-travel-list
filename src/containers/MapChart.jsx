@@ -5,6 +5,7 @@ import {
   Geography,
   Marker
 } from "react-simple-maps";
+import { useTotravelState } from "../TotravelContext";
 
 const markers = [
     { markerOffset: -30, code:'as', name: "Asia", coordinates: [140, 20] },
@@ -28,24 +29,8 @@ const rounded = num => {
 };
 
 const MapChart = ({ setTooltipContent, setplanListPage }) => {
-  const [selectedKey, setSelectedKey] = useState([]);
-  const [selectedCountries, setSelectedCountries] = useState({
-    'Asia' : [
-      
-    ],
-    'North America' : [
-      
-    ],
-    'South America' : [
-      
-    ],
-    'Africa' : [
-      
-    ],
-    'Europe' : [
-      
-    ]
-  });
+  const [selectedKey, setSelectedKey] = useState([]); // 삭제 예정
+  const selectedCountries = useTotravelState();
   
   const makerOnClick = (code, name)=>{
     console.log(name)
@@ -56,13 +41,10 @@ const MapChart = ({ setTooltipContent, setplanListPage }) => {
     });
   }
 
-                  console.log(selectedCountries);
-
   return (
     <>
-      <h1>To-Travel List</h1>
 
-      <ComposableMap data-tip="" projectionConfig={{ scale: 150 }}>
+      <ComposableMap data-tip="Click where to visit" projectionConfig={{ scale: 200 }} width="1200" height="900">
         <Geographies geography={geoUrl}>
           {({ geographies }) => 
             geographies.map(geo => ( selectedKey.find(a => a === geo.rsmKey) === geo.rsmKey ?   // [IF문] 선택된 Geography 컴포넌트의 키값을 selectedKey 배열에 있는지 확인하여, 지도에 색상을 달리하여줌
@@ -77,6 +59,9 @@ const MapChart = ({ setTooltipContent, setplanListPage }) => {
                   setTooltipContent("");
                 }}
                 onClick={(e) => {
+                  var CountryNum = (geo.rsmKey.match(/\d/g)).join('');
+                  var CountryList = selectedCountries[geographies[CountryNum].properties.CONTINENT];
+                  CountryList.push(geographies[CountryNum].properties.NAME);
                   setSelectedKey(selectedKey.filter(a => a !== `${geo.rsmKey}`));     // 선택된 Geography 컴포넌트의 키값을 selectedKey 배열에서 제거
                 }}
                 style={{
@@ -105,15 +90,15 @@ const MapChart = ({ setTooltipContent, setplanListPage }) => {
                 setTooltipContent("");
               }}
               onClick={(e) => {
-                setSelectedKey(selectedKey.concat(geo.rsmKey));     // 선택된 Geography 컴포넌트의 키값을 selectedKey 배열에 추가
                 var CountryNum = (geo.rsmKey.match(/\d/g)).join('');
-                var CountryList = [];
+                var CountryList = selectedCountries[geographies[CountryNum].properties.CONTINENT];
                 CountryList.push(geographies[CountryNum].properties.NAME);
-                // setSelectedCountries(selectedCountries.concat(geographies[CountryNum].properties.NAME));     // 선택된 Geography 국가 번호를 selectedCountries 배열에 추가 (To travel list 연동)
-                setSelectedCountries({
-                  ...selectedCountries,
-                  [geographies[CountryNum].properties.CONTINENT] : CountryList
-                });
+
+                setSelectedKey(selectedKey.concat(geo.rsmKey));     // 선택된 Geography 컴포넌트의 키값을 selectedKey 배열에 추가
+                // setSelectedCountries({
+                //   ...selectedCountries,
+                //   [geographies[CountryNum].properties.CONTINENT] : CountryList
+                // });
               }}
               style={{
                 default: {
