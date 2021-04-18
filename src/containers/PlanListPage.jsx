@@ -1,29 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PlanBlock from '../components/PlanBlock';
+import AddListPop from '../components/AddListPop';
 
-import { ImCancelCircle } from "react-icons/im";
-import { HiOutlinePlusCircle } from "react-icons/hi";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import { useSelector } from 'react-redux';
+import { FaRegCalendarPlus } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
+
+import { useTodoState } from '../DataContext';
 
 const PlanListBlock = styled.section`
     position: fixed;
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     color: #fff;
 
-    .locationIcon{
-        color: #F53;
-        font-size: 18px;
+    .icon{
+        cursor: pointer;
+    }
+
+    div{
+        font-size: 30px;
+        line-height: 50px;
+        padding: 0 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .locationIcon{
+            color: #F53;
+            margin-right: 10px;
+        }
+
+        .cancelIcon{
+            font-size: 29px;
+            margin-left: 15px;
+        }
     }
 `;
 
+
 const PlanListPage = ({ locationCode, locationName, setplanListPage })=>{
 
-    const plans = useSelector((state)=>state.planData);
+    const [addPage, setAddPage] = useState(false);
+    const plans = useTodoState();
 
     const onClickExit = ()=>{
         setplanListPage({
@@ -34,17 +56,24 @@ const PlanListPage = ({ locationCode, locationName, setplanListPage })=>{
     }
 
     return(
-        <PlanListBlock>
-            <div>
-                <HiOutlineLocationMarker className="locationIcon"/> 
-                {locationName}
-                <HiOutlinePlusCircle />
-                <ImCancelCircle onClick={onClickExit}/>
-            </div>
-            {plans.map((plan, idx)=>
-                plan.code === locationCode && <PlanBlock data={plan} key={idx}/>
-            )}
-        </PlanListBlock>
+        <>
+            <PlanListBlock>
+                <div className="popupTitle">
+                    <p>
+                        <HiOutlineLocationMarker className="locationIcon"/> 
+                        <span>{locationName}</span>
+                    </p>
+                    <p>
+                        <FaRegCalendarPlus className="icon" onClick={()=>{setAddPage(true)}}/>
+                        <GiCancel className="cancelIcon icon" onClick={onClickExit}/>
+                    </p>
+                </div>
+                {plans.map((plan, idx)=>
+                    plan.code === locationCode && <PlanBlock data={plan} key={idx}/>
+                )}
+            </PlanListBlock>
+            {addPage && <AddListPop setAddPage={setAddPage}/>}
+        </>
     );
 }
 
