@@ -84,7 +84,7 @@ const BtnArea = styled.p`
     }
 `;
 
-const AddListPop = ({ setAddPage })=>{
+const AddListPop = ({ setAddPage, locationCode })=>{
 
     const [inputList, setInputList] = useState({
         title:'',
@@ -130,7 +130,7 @@ const AddListPop = ({ setAddPage })=>{
             type: 'CREATE_PLAN',
             data: {
                 id: nextId.current,
-                code: 'eu',
+                code: locationCode,
                 title: inputList.title,
                 startDate: inputList.startDate,
                 endDate: inputList.endDate

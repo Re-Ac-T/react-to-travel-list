@@ -72,7 +72,7 @@ const PlanListPage = ({ locationCode, locationName, setplanListPage })=>{
                     plan.code === locationCode && <PlanBlock data={plan} key={idx}/>
                 )}
             </PlanListBlock>
-            {addPage && <AddListPop setAddPage={setAddPage}/>}
+            {addPage && <AddListPop setAddPage={setAddPage} locationCode={locationCode}/>}
         </>
     );
 }
