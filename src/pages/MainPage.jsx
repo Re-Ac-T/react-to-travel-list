@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import ReactTooltip from "react-tooltip";
-import TotravelTemplate from "../components/TotravelTemplate";
+import TotravelTemplate from "../components/ToTravelTemplate";
 import MapChart from "../containers/MapChart";
 import PlanListPage from "../containers/PlanListPage";
 import { TotravelProvider } from '../TotravelContext';
