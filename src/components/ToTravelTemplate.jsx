@@ -1,34 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useTotravelState } from '../TotravelContext';
+import TotravelHead from './TotravelHead';
+import TotravelList from './TotravelList';
 
 const TotravelEntireBlock = styled.div`
-    opacity: 0.7;
-    position: absolute;
     top:0;
     text-align: center;
-    width: 100%;
-    
+    width: 100%;    
 `;
 
-const TotravelTemplateBlock = styled.div`
-    width: 15%;
-    height: 150px;
-    background: rgb(129, 130, 133);
-    opacity: 1;
-    border-radius: 16px;
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
-    margin: 10px 5px; /* 페이지 중앙에 나타나도록 설정 */
+const TotravelContinentBlock = styled.div`
     display: inline-block;
+    width: 20%;
+    margin : 10px;
 `;
 
-function TotravelTemplate ({children}) {
+function TotravelTemplate () {
+    const totravels = useTotravelState();
+
     return (
         <TotravelEntireBlock>
-            <TotravelTemplateBlock>{children}</TotravelTemplateBlock>
-            <TotravelTemplateBlock>{children}</TotravelTemplateBlock>
-            <TotravelTemplateBlock>{children}</TotravelTemplateBlock>
-            <TotravelTemplateBlock>{children}</TotravelTemplateBlock>
-            <TotravelTemplateBlock>{children}</TotravelTemplateBlock>
+            {Object.keys(totravels).map((continent) => (
+                [<TotravelContinentBlock>
+                    <TotravelHead
+                        continent={continent}
+                        totravel={totravels[continent]}
+                    />
+                    <TotravelList
+                        continent={continent}
+                        totravel={totravels[continent]}
+                    />
+                </TotravelContinentBlock>])
+            )}
         </TotravelEntireBlock>
     );
 };

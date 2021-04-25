@@ -1,75 +1,69 @@
 import React, { useReducer, createContext, useContext, useRef } from 'react';
 
 const initialToTravels = {
-    'Asia' : [
-        {
-            id: '',
-            country: '',
-            visited: false
-        }
-    ],
-    'Europe' : [
-        {
-            id: '',
-            country: '',
-            visited: false
-        }
-    ],
-    'North America' : [
-        {
-            id: '',
-            country: '',
-            visited: false
-        }
-    ],
-    'South America' : [
-        {
-            id: '',
-            country: '',
-            visited: false
-        }
-    ],
-    'Africa' : [
-        {
-            id: '',
-            country: '',
-            visited: false
-        }
-    ]
+    'Asia' : [],
+    'Europe' : [],
+    'North America' : [],
+    'South America' : [],
+    'Africa' : [],
+    'Oceania' : [],
+    'Antarctica' : []
 }
 
-function todoReducer(state, action) {
+function todoReducer(selectedCountries, action) {
     switch (action.type) {
-        case 'CREATE':
-            return state.concat(action.totravel);
+        case 'ADD':
+            return {
+                ...selectedCountries,
+                [action.totravel.continent] : [
+                    ...selectedCountries[action.totravel.continent],
+                    action.totravel
+                ]
+            }
         case 'REMOVE':
-            return state.filter(totravel => totravel.id !== action.id);
+            var arr1 = selectedCountries[action.totravel.continent].filter(a => a.country !== action.totravel.country);
+            return {
+                ...selectedCountries,
+                [action.totravel.continent] : arr1
+            }
+        case 'TOGGLE':
+            var arr2 = selectedCountries[action.totravel.continent].map(a => a.country === action.totravel.country ? {...a, visited : !a.visited} : a);
+            return {
+                ...selectedCountries,
+                [action.totravel.continent] : arr2
+            }
         default:
             throw new Error(`unhandled action type : ${action.type}`);
     }
 }
 
 const TotravelStateContext = createContext();
+const CountryListContext = createContext();
 const TotravelDispatchContext = createContext();
 const TotravelNextIdContext = createContext();
 
 export function TotravelProvider ({ children }) {
     const [selectedCountries, dispatch] = useReducer(todoReducer, initialToTravels);
+    const countryList = useRef([]);
     const nextId = useRef({
         'Asia' : 1,
         'Europe' : 1,
         'North America' : 1,
         'South America' : 1,
-        'Africa' : 1
+        'Africa' : 1,
+        'Oceania' : 1,
+        'Antarctica' : 1
     });
     return (
-        <TotravelStateContext.Provider value={selectedCountries}>
-            <TotravelDispatchContext.Provider value={dispatch}>
-                <TotravelNextIdContext.Provider value={nextId}>
-                    {children}
-                </TotravelNextIdContext.Provider>
-            </TotravelDispatchContext.Provider>
-        </TotravelStateContext.Provider>
+        <CountryListContext.Provider value={countryList}>
+            <TotravelStateContext.Provider value={selectedCountries}>
+                <TotravelDispatchContext.Provider value={dispatch}>
+                    <TotravelNextIdContext.Provider value={nextId}>
+                        {children}
+                    </TotravelNextIdContext.Provider>
+                </TotravelDispatchContext.Provider>
+            </TotravelStateContext.Provider>
+        </CountryListContext.Provider>
     );
 };
 
@@ -79,6 +73,14 @@ export function useTotravelState() {
         throw new Error('Cannot find TotravelState');
     }
     return useContext(TotravelStateContext);
+}
+
+export function useCountryList() {
+    const context = useContext(CountryListContext);
+    if (!context) {
+        throw new Error('Cannot find CountryList');
+    }
+    return useContext(CountryListContext);
 }
 
 export function useTotravelDispatch() {

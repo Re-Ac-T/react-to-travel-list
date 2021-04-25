@@ -1,10 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
 
-const TotravelHead = () => {
+const TotravelHeadBlock = styled.div`
+    color: white;
+    text-align: center;
+    background-color: gray;
+`;
+
+const TotravelHead = ( {continent, totravel} ) => {
     return (
-        <div>
-            head
-        </div>
+        <TotravelHeadBlock>
+            {totravel.length} {totravel.length === 1 ? `Country` : `Countries`} <br/>
+            ({continent}) 
+        </TotravelHeadBlock>
     );
 };
 
