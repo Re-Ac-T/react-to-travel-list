@@ -1,12 +1,11 @@
 import React, {useState} from "react";
 import ReactTooltip from "react-tooltip";
-import TotravelTemplate from "../components/ToTravelTemplate";
-import MapChart from "../containers/MapChart";
+import TotravelTemplate from "../components/TotravelTemplate";
+import WorldMap from "../containers/WorldMap";
 import PlanListPage from "../containers/PlanListPage";
 import { TotravelProvider } from '../TotravelContext';
 import TotravelHead from '../components/TotravelHead';
 import TotravelList from '../components/TotravelList';
-import TotravelCreate from '../components/TotravelCreate';
 
 const MainPage = () => {
   const [content, setContent] = useState("");
@@ -18,12 +17,13 @@ const MainPage = () => {
 
   return (
     <TotravelProvider>
+      <h1 style={{textAlign: "center", color: 'white'}}>World Map</h1>
       <ReactTooltip>{content}</ReactTooltip>
-      <MapChart setTooltipContent={setContent} setplanListPage={setplanListPage} />
+      <WorldMap setTooltipContent={setContent} setplanListPage={setplanListPage} />
+      <h1 style={{textAlign: "center", color: 'white'}}>Totravel-list</h1>
       <TotravelTemplate>
-        <TotravelHead></TotravelHead>
-        <TotravelList></TotravelList>
-        <TotravelCreate></TotravelCreate>
+        <TotravelHead />
+        <TotravelList />
       </TotravelTemplate>
       {planListPage.state && 
       <PlanListPage 
